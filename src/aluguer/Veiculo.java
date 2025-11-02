@@ -21,7 +21,7 @@ public class Veiculo {
             modelo.adicionarVeiculo(this);
         }
     }
-    
+
     public void adicionarAluguer(Aluguer aluguer){
         if (!aluguers.contains(aluguer)) {
             aluguers.add(aluguer);
@@ -31,9 +31,19 @@ public class Veiculo {
     public List<Aluguer> getAluguers() {
         return aluguers;
     }
-    
-    
 
+    public void consultaAluguer(Veiculo veiculo){
+        if (veiculo == null || veiculo.getAluguers() == null || veiculo.getAluguers().isEmpty()) {
+            System.out.println("Nenhum aluguer encontrado para este veículo");  
+            return;  
+        }
+
+        for(Aluguer a : veiculo.getAluguers()){
+           System.out.println("Reserva "+  a.getReserva());
+        }
+    }
+    
+    
      //TUDO
     public void consultaVeiculo(){
 
