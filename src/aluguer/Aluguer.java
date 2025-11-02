@@ -19,6 +19,10 @@ public class Aluguer {
         this.fim = fim;
         this.precoTotal = precoTotal;
         this.codigo = codigo;
+
+        if (veiculo != null) {
+            veiculo.adicionarAluguer(this);
+        }
     }
     //TUDO
     public void criaAluguer(){
@@ -37,6 +41,11 @@ public class Aluguer {
 
     //TUDO
     public void geraCodigoAluguer(){
+
+    }
+    
+    //TUDO
+    public void PrecoCalculator(){
         
     }
 

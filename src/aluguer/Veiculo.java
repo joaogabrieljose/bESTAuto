@@ -1,17 +1,38 @@
 package aluguer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Veiculo {
     private String matricula;
     private Modelo modelo;
     private String estacaoAtual;
     private boolean indisponibilidades = false;
+    private List<Aluguer> aluguers;
     
     public Veiculo(String matricula, Modelo modelo, String estacaoAtual, boolean indisponibilidades){
         this.matricula = matricula;
         this.modelo = modelo;
         this.estacaoAtual = estacaoAtual;
         this.indisponibilidades = indisponibilidades;
+        this.aluguers = new ArrayList<>();
+
+        if (modelo != null) {
+            modelo.adicionarVeiculo(this);
+        }
     }
+    
+    public void adicionarAluguer(Aluguer aluguer){
+        if (!aluguers.contains(aluguer)) {
+            aluguers.add(aluguer);
+        }
+    }
+
+    public List<Aluguer> getAluguers() {
+        return aluguers;
+    }
+    
+    
 
      //TUDO
     public void consultaVeiculo(){
@@ -59,5 +80,6 @@ public class Veiculo {
     public void setIndisponibilidades(boolean indisponibilidades) {
         this.indisponibilidades = indisponibilidades;
     }
+ 
 
 }

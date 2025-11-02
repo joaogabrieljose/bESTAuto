@@ -28,6 +28,10 @@ public class Modelo {
         }
     }
 
+       public List<Veiculo> getVeiculos() {
+        return veiculos;
+    }
+
     public String getMarca() {
         return marca;
     }
@@ -76,14 +80,6 @@ public class Modelo {
         this.precoDiario = precoDiario;
     }
 
-    public List<Veiculo> getVeiculos() {
-        return veiculos;
-    }
-
-    public void setVeiculos(List<Veiculo> veiculos) {
-        this.veiculos = veiculos;
-    }
-
-    
+ 
     
 }
