@@ -1,5 +1,8 @@
 package aluguer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Modelo {
     private String marca;
     private String descricao;
@@ -7,6 +10,7 @@ public class Modelo {
     private int lotacao;
     private int capacidadeBagagem;
     private double precoDiario;
+    private List<Veiculo> veiculos;
 
     public Modelo(String marca, String descricao, Categoria categoria, int lotacao, int capacidadeBagagem, double precoDiario){
         this.marca = marca;
@@ -15,6 +19,13 @@ public class Modelo {
         this.lotacao = lotacao;
         this.capacidadeBagagem = capacidadeBagagem;
         this.precoDiario = precoDiario;
+        this.veiculos = new ArrayList<>();
+    }
+
+    public void adicionarVeiculo(Veiculo v){
+        if (!veiculos.contains(v)) {
+            veiculos.add(v);
+        }
     }
 
     public String getMarca() {
@@ -63,6 +74,14 @@ public class Modelo {
 
     public void setPrecoDiario(double precoDiario) {
         this.precoDiario = precoDiario;
+    }
+
+    public List<Veiculo> getVeiculos() {
+        return veiculos;
+    }
+
+    public void setVeiculos(List<Veiculo> veiculos) {
+        this.veiculos = veiculos;
     }
 
     

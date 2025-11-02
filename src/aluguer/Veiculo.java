@@ -2,11 +2,11 @@ package aluguer;
 
 public class Veiculo {
     private String matricula;
-    private String modelo;
+    private Modelo modelo;
     private String estacaoAtual;
     private boolean indisponibilidades = false;
     
-    public Veiculo(String matricula, String modelo, String estacaoAtual, boolean indisponibilidades){
+    public Veiculo(String matricula, Modelo modelo, String estacaoAtual, boolean indisponibilidades){
         this.matricula = matricula;
         this.modelo = modelo;
         this.estacaoAtual = estacaoAtual;
@@ -36,11 +36,11 @@ public class Veiculo {
         this.matricula = matricula;
     }
 
-    public String getModelo() {
+    public Modelo getModelo() {
         return modelo;
     }
 
-    public void setModelo(String modelo) {
+    public void setModelo(Modelo modelo) {
         this.modelo = modelo;
     }
 
