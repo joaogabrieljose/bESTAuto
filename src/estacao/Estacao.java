@@ -11,16 +11,33 @@ public class Estacao {
     private int capacidade;
     private List<Veiculo> veiculos;
     private boolean ativo;
+    private TipoEstacao tipo;
 
-    public Estacao(String codigo, String localizacao, int capacidade, boolean ativo){
+    public Estacao(String codigo, String localizacao, int capacidade, boolean ativo, TipoEstacao tipo){
         this.codigo = codigo;
         this.localizacao = localizacao;
         this.capacidade = capacidade;
         this.ativo = ativo;
         this.veiculos = new ArrayList<>();
+        this.tipo = tipo;
     }
 
-    
+    public Veiculo viaturaCentralDisponivel(){
+        if (this.tipo != TipoEstacao.CENTRAL) {
+            throw new IllegalArgumentException("esta estação não é a central...");
+        }
+        for(Veiculo v: veiculos){
+
+            if (!v.isIndisponibilidades()) {
+                v.setIndisponibilidades(true);
+                return v;
+            }
+        }
+        throw new IllegalArgumentException("nenhuma viatura disponivel na central...");
+    }
+
+
+
     public String getCodigo() {
         return codigo;
     }
@@ -60,5 +77,15 @@ public class Estacao {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
+
+    public TipoEstacao getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoEstacao tipo) {
+        this.tipo = tipo;
+    }
+
+    
     
 }

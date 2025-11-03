@@ -27,6 +27,13 @@ public class Veiculo {
             aluguers.add(aluguer);
         }
     }
+     public boolean isIndisponibilidades() {
+        return indisponibilidades;
+    }
+
+    public void setIndisponibilidades(boolean indisponibilidades) {
+        this.indisponibilidades = indisponibilidades;
+    }
 
     public List<Aluguer> getAluguers() {
         return aluguers;
@@ -83,13 +90,7 @@ public class Veiculo {
         this.estacaoAtual = estacaoAtual;
     }
 
-    public boolean isIndisponibilidades() {
-        return indisponibilidades;
-    }
-
-    public void setIndisponibilidades(boolean indisponibilidades) {
-        this.indisponibilidades = indisponibilidades;
-    }
+   
  
 
 }
