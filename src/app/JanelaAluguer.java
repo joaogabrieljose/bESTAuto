@@ -98,7 +98,7 @@ public class JanelaAluguer extends JFrame {
 						e.getVeiculos() == null ? 0 : e.getVeiculos().size());
 				nomes.add(linha);
 			}
-			
+
 			Collections.sort(nomes);
 		}
 		if (nomes.isEmpty()) {
@@ -112,10 +112,21 @@ public class JanelaAluguer extends JFrame {
 	 * @param selecionadaIndex o índice da estação selecionada
 	 */
 	private void escolherEstacao(int selecionadaIndex) {
-		// TODO selecionar a estação adequada
+		// FEITO selecionar a estação adequada
 
 		// limpar a pesquisa
 		limparPesquisa();
+		if (bestAuto == null || bestAuto.getEstacaes().isEmpty()) {
+			JOptionPane.showMessageDialog(this,"Nenhuma estação esta carregada ","Erro", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		if (selecionadaIndex < 0 || selecionadaIndex >= bestAuto.getEstacaes().size() ) {
+			JOptionPane.showMessageDialog(this,"estação invalida  ","aviso", JOptionPane.ERROR_MESSAGE);
+		}
+
+		Estacao estacaoSelecionada = bestAuto.getEstacaes().get(selecionadaIndex);
+		System.out.println("estação selecionada"+ estacaoSelecionada.getCodigo() + "localização"+ estacaoSelecionada.getLocalizacao());
 	}
 
 	/**
