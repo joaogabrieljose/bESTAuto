@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -85,19 +86,25 @@ public class JanelaAluguer extends JFrame {
 		// FEITO colocar a lista de nomes das estações (ordenadas alfabeticamente) no
 		// vetor nomes (o que está é apenas de exemplo)
 		Vector<String> nomes = new Vector<>();
-		for(Estacao e : bestAuto.getEstacaes() ){
-			nomes.add(e.getCodigo()+" - "+ 
-			e.getLocalizacao()+" - "+ 
-			e.getCapacidade()+" lugares - " + 
-			e.getTipo().name() + " - " + 
-			e.getVeiculos().size());
-		}
 
-		// Vector<String> nome = new Vector<>();
-		// nomes.add("Alcains");
-		// nomes.add("Castelo Branco");
-		setupJanela(nomes);
-	}
+		if (bestAuto != null && bestAuto.getEstacaes() != null) {
+      
+			for (Estacao e : bestAuto.getEstacaes()) {
+				String linha = String.format("%s - %s - %d lugares - %s - %d veículos",
+						e.getCodigo(),
+						e.getLocalizacao(),
+						e.getCapacidade(),
+						e.getTipo() == null ? "N/A" : e.getTipo().name(),
+						e.getVeiculos() == null ? 0 : e.getVeiculos().size());
+				nomes.add(linha);
+			}
+			
+			Collections.sort(nomes);
+		}
+		if (nomes.isEmpty()) {
+			nomes.add("sem estão carregada");
+		}
+	}	
 
 	/**
 	 * Método chamado quando o utilizador muda de estação
