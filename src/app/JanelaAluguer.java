@@ -73,6 +73,8 @@ public class JanelaAluguer extends JFrame {
 	// intervalo de tempo selecionado pelo utilziador
 	private IntervaloTempo intervaloSel;
 
+	private Estacao estacaoAtual = null;
+
 	// A companhia a ser usada
 	private BESTAuto bestAuto;
 
@@ -118,11 +120,14 @@ public class JanelaAluguer extends JFrame {
 		limparPesquisa();
 		if (bestAuto == null || bestAuto.getEstacaes().isEmpty()) {
 			JOptionPane.showMessageDialog(this,"Nenhuma estação esta carregada ","Erro", JOptionPane.ERROR_MESSAGE);
+			estacaoAtual = null;
 			return;
 		}
 
 		if (selecionadaIndex < 0 || selecionadaIndex >= bestAuto.getEstacaes().size() ) {
-			JOptionPane.showMessageDialog(this,"estação invalida  ","aviso", JOptionPane.ERROR_MESSAGE);
+			estacaoAtual = bestAuto.getEstacaes().get(0);
+		}else{
+			estacaoAtual = bestAuto.getEstacaes().get(selecionadaIndex);
 		}
 
 		Estacao estacaoSelecionada = bestAuto.getEstacaes().get(selecionadaIndex);
@@ -133,11 +138,26 @@ public class JanelaAluguer extends JFrame {
 	 * método chamado quando o utilizador pressiona o botão de apresentar horário
 	 */
 	private void apresentarHorario() {
-		// TODO ir buscar o horário da estação atual, em vez de usar um vazio
-		HorarioSemanal hs = HorarioSemanal.sempreFechado();
-
+		if (estacaoAtual == null) {
+			if (bestAuto != null && bestAuto.getEstacaes() != null && !bestAuto.getEstacaes().isEmpty()) {
+				estacaoAtual = bestAuto.getEstacaes().get(0);
+				System.out.println("estacaoAtual não definida — usando primeira estação como fallback: " + estacaoAtual.getCodigo());
+			} else {
+				JOptionPane.showMessageDialog(this, "Nenhuma estação selecionada nem disponível.", "Aviso", JOptionPane.WARNING_MESSAGE);
+				apresentarHorario(HorarioSemanal.sempreFechado());
+				return;
+			}
+		}
+		HorarioSemanal hs = null;
+		try {
+			hs = estacaoAtual.getHorarioSemanal(); 
+		} catch (NoSuchMethodError | NullPointerException ex) {
+			hs = null;
+		}
+		if (hs == null) hs = HorarioSemanal.sempreFechado();
 		apresentarHorario(hs);
 	}
+
 
 	/**
 	 * Método chamado quando o utilizador pressiona o botão de pesquisar

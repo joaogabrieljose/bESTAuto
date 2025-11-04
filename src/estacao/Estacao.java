@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aluguer.Veiculo;
+import pds.tempo.HorarioSemanal;
 
 public class Estacao {
     private String codigo;
@@ -12,14 +13,16 @@ public class Estacao {
     private List<Veiculo> veiculos;
     private boolean ativo = false ;
     private TipoEstacao tipo;
+    private HorarioSemanal horarioSemanal;
 
-    public Estacao(String codigo, String localizacao, int capacidade, boolean ativo, TipoEstacao tipo){
+    public Estacao(String codigo, String localizacao, int capacidade, boolean ativo, TipoEstacao tipo, HorarioSemanal horarioSemanal){
         this.codigo = codigo;
         this.localizacao = localizacao;
         this.capacidade = capacidade;
         this.ativo = ativo;
         this.veiculos = new ArrayList<>();
         this.tipo = tipo;
+        this.horarioSemanal = horarioSemanal.sempreFechado();
     }
 
     public Veiculo viaturaCentralDisponivel(){
@@ -86,6 +89,15 @@ public class Estacao {
         this.tipo = tipo;
     }
 
+    public HorarioSemanal getHorarioSemanal() {
+        return horarioSemanal;
+    }
+
+    public void setHorarioSemanal(HorarioSemanal horarioSemanal) {
+        this.horarioSemanal = horarioSemanal;
+    }
+
+    
     
     
 }
