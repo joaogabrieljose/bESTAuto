@@ -10,7 +10,7 @@ public class Estacao {
     private String localizacao;
     private int capacidade;
     private List<Veiculo> veiculos;
-    private boolean ativo;
+    private boolean ativo = false ;
     private TipoEstacao tipo;
 
     public Estacao(String codigo, String localizacao, int capacidade, boolean ativo, TipoEstacao tipo){

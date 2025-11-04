@@ -31,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
 
 import aluguer.BESTAuto;
 import aluguer.Categoria;
+import estacao.Estacao;
 import pds.tempo.HorarioDiario;
 import pds.tempo.HorarioSemanal;
 import pds.tempo.IntervaloTempo;
@@ -81,11 +82,20 @@ public class JanelaAluguer extends JFrame {
 		bestAuto = a;
 		setTitle("bEST Auto - A melhor experiência em aluguer de automóveis");
 
-		// TODO colocar a lista de nomes das estações (ordenadas alfabeticamente) no
+		// FEITO colocar a lista de nomes das estações (ordenadas alfabeticamente) no
 		// vetor nomes (o que está é apenas de exemplo)
 		Vector<String> nomes = new Vector<>();
-		nomes.add("Alcains");
-		nomes.add("Castelo Branco");
+		for(Estacao e : bestAuto.getEstacaes() ){
+			nomes.add(e.getCodigo()+" - "+ 
+			e.getLocalizacao()+" - "+ 
+			e.getCapacidade()+" lugares - " + 
+			e.getTipo().name() + " - " + 
+			e.getVeiculos().size());
+		}
+
+		// Vector<String> nome = new Vector<>();
+		// nomes.add("Alcains");
+		// nomes.add("Castelo Branco");
 		setupJanela(nomes);
 	}
 
