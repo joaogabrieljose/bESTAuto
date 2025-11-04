@@ -118,7 +118,7 @@ public class JanelaAluguer extends JFrame {
 	 */
 	private void escolherEstacao(int selecionadaIndex) {
 		// FEITO selecionar a estação adequada
-		
+
 		// limpar a pesquisa
 		limparPesquisa();
 		if (bestAuto == null || bestAuto.getEstacaes().isEmpty()) {
@@ -167,61 +167,76 @@ public class JanelaAluguer extends JFrame {
 	 * Método chamado quando o utilizador pressiona o botão de pesquisar
 	 */
 	private void pesquisar() {
-    limparPesquisa();
-    LocalDateTime inicio = LocalDateTime.of(dataInicio, horasInicio);
-    LocalDateTime fim = LocalDateTime.of(dataFim, horasFim);
-    if (!inicio.isBefore(fim) || !dataInicio.isBefore(dataFim)) {
-        JOptionPane.showMessageDialog(null,
-                "A data de fim tem de ser superior em 1 dia, pelo menos, à data de início");
-        return;
-    }
-    intervaloSel = IntervaloTempo.entre(inicio, fim);
+		limparPesquisa();
+		LocalDateTime inicio = LocalDateTime.of(dataInicio, horasInicio);
+		LocalDateTime fim = LocalDateTime.of(dataFim, horasFim);
+		if (!inicio.isBefore(fim) || !dataInicio.isBefore(dataFim)) {
+			JOptionPane.showMessageDialog(null,
+					"A data de fim tem de ser superior em 1 dia, pelo menos, à data de início");
+			return;
+		}
+		intervaloSel = IntervaloTempo.entre(inicio, fim);
 
-    // escolher estações para pesquisa (estacaoAtual tem prioridade)
-    List<Estacao> pesquisaEstacoes = new ArrayList<>();
-    if (estacaoAtual != null) {
-        pesquisaEstacoes.add(estacaoAtual);
-    } else if (bestAuto != null && bestAuto.getEstacaes() != null) { // ajusta nome se for diferente
-        pesquisaEstacoes.addAll(bestAuto.getEstacaes());
-    }
+		// escolher estações para pesquisa (estacaoAtual tem prioridade)
+		List<Estacao> pesquisaEstacoes = new ArrayList<>();
+		if (estacaoAtual != null) {
+			pesquisaEstacoes.add(estacaoAtual);
+		} else if (bestAuto != null && bestAuto.getEstacaes() != null) { // ajusta nome se for diferente
+			pesquisaEstacoes.addAll(bestAuto.getEstacaes());
+		}
 
-    Categoria categoriaSelecionada = (Categoria) categCb.getSelectedItem();
-    int resultado = 0;
+		Categoria categoriaSelecionada = (Categoria) categCb.getSelectedItem();
+		int resultado = 0;
 
-    for (Estacao est : pesquisaEstacoes) {
-        if (est == null || est.getVeiculos() == null) continue;
+		for (Estacao est : pesquisaEstacoes) {
+			if (est == null || est.getVeiculos() == null) continue;
 
-        for (aluguer.Veiculo v : est.getVeiculos()) {
-            // filtro: viatura marcada como indisponível
-            if (v.isIndisponibilidades()) continue;
+			for (aluguer.Veiculo v : est.getVeiculos()) {
+				// filtro: viatura marcada como indisponível
+				if (v.isIndisponibilidades()) continue;
 
-           // FEITO para cada viatura da pesquisa criar um painel e 
-		   // associar a informação adequada. Cada painel terá um valor (à escolha do 
-		   // grupo) que o associará a um resultado. Esse valor será depois usado 
-		   // para identificar qual a viatura alugada se o cliente escolher esse painel
-            if (categoriaSelecionada != null) {
-                Modelo modelo = v.getModelo();
-                if (modelo == null || modelo.getCategoria() == null || modelo.getCategoria() != categoriaSelecionada) {
-                    continue;
-                }
-            }
+			// FEITO para cada viatura da pesquisa criar um painel e 
+			// associar a informação adequada. Cada painel terá um valor (à escolha do 
+			// grupo) que o associará a um resultado. Esse valor será depois usado 
+			// para identificar qual a viatura alugada se o cliente escolher esse painel
+				if (categoriaSelecionada != null) {
+					Modelo modelo = v.getModelo();
+					if (modelo == null || modelo.getCategoria() == null || modelo.getCategoria() != categoriaSelecionada) {
+						continue;
+					}
+				}
 
-            PainelAluguer pa = new PainelAluguer(
-                v.getModelo() == null ? "Modelo desconhecido" : v.getModelo().toString(),
-                v.getModelo().getLotacao(),   
-                /* bagagem */ v.getModelo().getCapacidadeBagagem(),   
-                120000,
-                v                 
-            );
-            alugueres.add(pa);
-            resultado++;
-        }
-    }
-    // FEITO sem resultados (alterar o teste, claro!)? Apresentar essa informação
-    if (resultado == 0) {
-        alugueres.add(new JLabel("-- SEM RESULTADOS --", JLabel.CENTER));
-    }
-}
+			    long precoEstimado = calcularPrecoEstimado(v, intervaloSel);
+
+				PainelAluguer pa = new PainelAluguer(
+					v.getModelo() == null ? "Modelo desconhecido" : v.getModelo().toString(),
+					v.getModelo().getLotacao(),   
+					v.getModelo().getCapacidadeBagagem(),   
+					precoEstimado,
+					v                 
+				);
+				alugueres.add(pa);
+				resultado++;
+			}
+		}
+		// FEITO sem resultados (alterar o teste, claro!)? Apresentar essa informação
+		if (resultado == 0) {
+			alugueres.add(new JLabel("-- SEM RESULTADOS --", JLabel.CENTER));
+		}
+	}
+
+	private long calcularPrecoEstimado(aluguer.Veiculo v, IntervaloTempo intervalo) {
+		long minutos = java.time.Duration.between(intervalo.getInicio(), intervalo.getFim()).toMinutes();
+		long dias = Math.max(1, (minutos + 24*60 - 1) / (24*60)); // arredonda para cima
+		long precoPorDiaCentimos = 5000; // exemplo: 50€ / dia
+		// tenta obter preço do modelo se existir
+		try {
+			// ex: if (v.getModelo() != null) precoPorDiaCentimos = v.getModelo().getPrecoDiarioCentimos();
+		} catch (Exception e) { 
+			
+		}
+		return precoPorDiaCentimos * dias;
+	}
 
 		
 
