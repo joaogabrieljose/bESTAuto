@@ -35,11 +35,13 @@ import javax.swing.table.DefaultTableModel;
 import aluguer.BESTAuto;
 import aluguer.Categoria;
 import aluguer.Modelo;
+import aluguer.Veiculo;
 import estacao.Estacao;
 import pds.tempo.HorarioDiario;
 import pds.tempo.HorarioSemanal;
 import pds.tempo.IntervaloTempo;
 import pds.ui.PainelListador;
+import pds.util.GeradorCodigos;
 
 @SuppressWarnings("serial")
 /**
@@ -171,8 +173,7 @@ public class JanelaAluguer extends JFrame {
 		LocalDateTime inicio = LocalDateTime.of(dataInicio, horasInicio);
 		LocalDateTime fim = LocalDateTime.of(dataFim, horasFim);
 		if (!inicio.isBefore(fim) || !dataInicio.isBefore(dataFim)) {
-			JOptionPane.showMessageDialog(null,
-					"A data de fim tem de ser superior em 1 dia, pelo menos, à data de início");
+			JOptionPane.showMessageDialog(null,"A data de fim tem de ser superior em 1 dia, pelo menos, à data de início");
 			return;
 		}
 		intervaloSel = IntervaloTempo.entre(inicio, fim);
@@ -238,9 +239,6 @@ public class JanelaAluguer extends JFrame {
 		return precoPorDiaCentimos * dias;
 	}
 
-		
-
-		
 
 	/**
 	 * Método chamado quando o utilizador pressiona o botão de alugar.
@@ -261,6 +259,7 @@ public class JanelaAluguer extends JFrame {
 						+ "</html>");
 		limparPesquisa();
 	}
+
 
 	/**
 	 * Cria e configura a janela
