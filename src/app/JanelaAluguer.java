@@ -11,11 +11,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.util.List;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Vector;
 import javax.swing.BorderFactory;
@@ -32,6 +34,7 @@ import javax.swing.table.DefaultTableModel;
 
 import aluguer.BESTAuto;
 import aluguer.Categoria;
+import aluguer.Modelo;
 import estacao.Estacao;
 import pds.tempo.HorarioDiario;
 import pds.tempo.HorarioSemanal;
@@ -115,7 +118,7 @@ public class JanelaAluguer extends JFrame {
 	 */
 	private void escolherEstacao(int selecionadaIndex) {
 		// FEITO selecionar a estação adequada
-
+		
 		// limpar a pesquisa
 		limparPesquisa();
 		if (bestAuto == null || bestAuto.getEstacaes().isEmpty()) {
@@ -138,6 +141,7 @@ public class JanelaAluguer extends JFrame {
 	 * método chamado quando o utilizador pressiona o botão de apresentar horário
 	 */
 	private void apresentarHorario() {
+		// FEITO selecionar a estação adequada
 		if (estacaoAtual == null) {
 			if (bestAuto != null && bestAuto.getEstacaes() != null && !bestAuto.getEstacaes().isEmpty()) {
 				estacaoAtual = bestAuto.getEstacaes().get(0);
@@ -163,34 +167,65 @@ public class JanelaAluguer extends JFrame {
 	 * Método chamado quando o utilizador pressiona o botão de pesquisar
 	 */
 	private void pesquisar() {
-		limparPesquisa();
+    limparPesquisa();
+    LocalDateTime inicio = LocalDateTime.of(dataInicio, horasInicio);
+    LocalDateTime fim = LocalDateTime.of(dataFim, horasFim);
+    if (!inicio.isBefore(fim) || !dataInicio.isBefore(dataFim)) {
+        JOptionPane.showMessageDialog(null,
+                "A data de fim tem de ser superior em 1 dia, pelo menos, à data de início");
+        return;
+    }
+    intervaloSel = IntervaloTempo.entre(inicio, fim);
 
-		// ver as datas de inicio e de fim
-		LocalDateTime inicio = LocalDateTime.of(dataInicio, horasInicio);
-		LocalDateTime fim = LocalDateTime.of(dataFim, horasFim);
-		// garantir que fim é, pelo menos, um dia depois do início
-		if (!inicio.isBefore(fim) || !dataInicio.isBefore(dataFim)) {
-			JOptionPane.showMessageDialog(null,
-					"A data de fim tem de ser superior em 1 dia, pelo menos, à data de início");
-			return;
-		}
-		intervaloSel = IntervaloTempo.entre(inicio, fim);
+    // escolher estações para pesquisa (estacaoAtual tem prioridade)
+    List<Estacao> pesquisaEstacoes = new ArrayList<>();
+    if (estacaoAtual != null) {
+        pesquisaEstacoes.add(estacaoAtual);
+    } else if (bestAuto != null && bestAuto.getEstacaes() != null) { // ajusta nome se for diferente
+        pesquisaEstacoes.addAll(bestAuto.getEstacaes());
+    }
 
-		// TODO fazer a pesquisa
+    Categoria categoriaSelecionada = (Categoria) categCb.getSelectedItem();
+    int resultado = 0;
 
-		// TODO para cada viatura da pesquisa criar um painel e
-		// associar a informação adequada. Cada painel terá um valor (à escolha do
-		// grupo) que o associará a um resultado. Esse valor será depois usado
-		// para identificar qual a viatura alugada se o cliente escolher esse painel
-		PainelAluguer pa1 = new PainelAluguer("Koenigsegg Gemera", 4, 1, 120000, null);
-		alugueres.add(pa1);
-		PainelAluguer pa2 = new PainelAluguer("Koenigsegg Jesko Attack", 2, 1, 100000, null);
-		alugueres.add(pa2);
+    for (Estacao est : pesquisaEstacoes) {
+        if (est == null || est.getVeiculos() == null) continue;
 
-		// TODO sem resultados (alterar o teste, claro!)? Apresentar essa informação
-		if (Math.abs(2) == -1)
-			alugueres.add(new JLabel("-- SEM RESULTADOS --", JLabel.CENTER));
-	}
+        for (aluguer.Veiculo v : est.getVeiculos()) {
+            // filtro: viatura marcada como indisponível
+            if (v.isIndisponibilidades()) continue;
+
+           // FEITO para cada viatura da pesquisa criar um painel e 
+		   // associar a informação adequada. Cada painel terá um valor (à escolha do 
+		   // grupo) que o associará a um resultado. Esse valor será depois usado 
+		   // para identificar qual a viatura alugada se o cliente escolher esse painel
+            if (categoriaSelecionada != null) {
+                Modelo modelo = v.getModelo();
+                if (modelo == null || modelo.getCategoria() == null || modelo.getCategoria() != categoriaSelecionada) {
+                    continue;
+                }
+            }
+
+            PainelAluguer pa = new PainelAluguer(
+                v.getModelo() == null ? "Modelo desconhecido" : v.getModelo().toString(),
+                v.getModelo().getLotacao(),   
+                /* bagagem */ v.getModelo().getCapacidadeBagagem(),   
+                120000,
+                v                 
+            );
+            alugueres.add(pa);
+            resultado++;
+        }
+    }
+    // FEITO sem resultados (alterar o teste, claro!)? Apresentar essa informação
+    if (resultado == 0) {
+        alugueres.add(new JLabel("-- SEM RESULTADOS --", JLabel.CENTER));
+    }
+}
+
+		
+
+		
 
 	/**
 	 * Método chamado quando o utilizador pressiona o botão de alugar.
