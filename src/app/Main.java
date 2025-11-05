@@ -4,10 +4,13 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import aluguer.BESTAuto;
 import aluguer.Categoria;
 import app.LeitorFicheiros.Bloco;
+import estacao.Estacao;
+import estacao.TipoEstacao;
 import pds.tempo.HorarioDiario;
 import pds.tempo.HorarioSemanal;
 
@@ -30,8 +33,10 @@ public class Main {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 		// criar as janelas
-		JanelaEstacoes je = new JanelaEstacoes(albi);
+
 		JanelaAluguer ja = new JanelaAluguer(albi);
+		JanelaEstacoes je = new JanelaEstacoes(albi, ja);
+		
 
 		// posicioná-las ao centro
 		int posx1 = (screenSize.width - je.getWidth() - ja.getWidth()) / 2;
@@ -53,22 +58,39 @@ public class Main {
 	private static void readEstacoes(BESTAuto best, String estacoesFile) {
 		try {
 			List<LeitorFicheiros.Bloco> blocos = LeitorFicheiros.lerFicheiro(estacoesFile);
+			if (best.getEstacaes() == null) {
+				//best.setEstacoes(new ArrayList<>());
+			}
 
 			for (LeitorFicheiros.Bloco b : blocos) {
-				// TODO completar este método
-				String id = b.getValor("id");
-				String nome = b.getValor("nome");
-				HorarioSemanal h = processarHorario(b);
-				processarCentral(best, b);
-				processarExtensao(b);
-				processarPagamentoExtensao(b);
-				// TODO armazenar a informação lida no sistema
-			}
+			// TODO completar este método
+            String codigo = b.getValor("codigo");
+            String localizacao = b.getValor("localizacao");
+            String capStr = b.getValor("capacidade");
+            String ativoStr = b.getValor("ativo");
+            String tipoStr = b.getValor("tipo");
+
+            int capacidade = capStr == null ? 0 : Integer.parseInt(capStr);
+            boolean ativo = ativoStr == null ? true : Boolean.parseBoolean(ativoStr);
+
+            TipoEstacao tipo = TipoEstacao.MEDIO;
+            if (tipoStr != null && !tipoStr.isBlank()) {
+                try {
+                    tipo = TipoEstacao.valueOf(tipoStr.toUpperCase());
+                } catch (IllegalArgumentException ex) {
+                    tipo = TipoEstacao.MEDIO;
+                }
+            }
+
+            Estacao est = new Estacao(codigo,  localizacao,  capacidade,  ativo,  tipo);
+            best.getEstacaes().add(est); // **muito importante**: adiciona ao BESTAuto
+        }
+		 System.out.println("Lidas " + best.getEstacaes().size() + " estações de " + estacoesFile);
 
 		} catch (IOException e) {
 			System.out.println("Erro na leitura do ficheiro " + estacoesFile);
 			e.printStackTrace();
-			System.exit(0);
+			System.exit(1);
 		}
 	}
 

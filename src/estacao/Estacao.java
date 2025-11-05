@@ -15,7 +15,7 @@ public class Estacao {
     private TipoEstacao tipo;
     private HorarioSemanal horarioSemanal;
 
-    public Estacao(String codigo, String localizacao, int capacidade, boolean ativo, TipoEstacao tipo, HorarioSemanal horarioSemanal){
+    public Estacao(String codigo, String localizacao, int capacidade, boolean ativo, TipoEstacao tipo){
         this.codigo = codigo;
         this.localizacao = localizacao;
         this.capacidade = capacidade;

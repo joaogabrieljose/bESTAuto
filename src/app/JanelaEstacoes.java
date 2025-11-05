@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import java.util.stream.Collectors;
@@ -27,6 +28,8 @@ import static javax.swing.SpringLayout.*;
 
 import aluguer.BESTAuto;
 import aluguer.Categoria;
+import estacao.Estacao;
+import estacao.EstacaoSelectionListener;
 
 @SuppressWarnings("serial")
 /**
@@ -40,19 +43,37 @@ public class JanelaEstacoes extends JFrame {
 	DefaultListModel<String> matriculasModel = new DefaultListModel<>();
 	DefaultTableModel indisponibilidadesModel;
 
+	 private EstacaoSelectionListener listener;
+	 //private Estacao estacaoAtual = null;
 	/**
 	 * Cria uma janela para apresentar informações sobre uma estação
 	 */
-	public JanelaEstacoes(BESTAuto a) {
+	public JanelaEstacoes(BESTAuto a, EstacaoSelectionListener listener) {
+		this.listener = listener;
 		setTitle("bEST Auto - A melhor experiência em aluguer de automóveis");
 
-		// TODO colocar a lista de nomes das estações (ordenadas alfabeticamente) no
+		// FEITO colocar a lista de nomes das estações (ordenadas alfabeticamente) no
 		// vetor nomes (o que está é apenas de exemplo)
-		Vector<String> nomes = new Vector<>();
-		nomes.add("Alcains");
-		nomes.add("Castelo Branco");
-		setupJanela(nomes);
-	}
+		
+		 Vector<String> nomes = new Vector<>();
+
+        if (a != null && a.getEstacaes() != null) {
+            for (estacao.Estacao e : a.getEstacaes()) {
+                String linha = String.format("%s - %s - %d lugares - %s - %d veículos",
+                    e.getCodigo(),
+                    e.getLocalizacao(),
+                    e.getCapacidade(),
+                    e.getTipo() == null ? "N/A" : e.getTipo().name(),
+                    e.getVeiculos() == null ? 0 : e.getVeiculos().size());
+                nomes.add(linha);
+            }
+            Collections.sort(nomes);
+        }
+        if (nomes.isEmpty()) nomes.add("Sem estações carregadas");
+
+        setupJanela(nomes);
+    }
+
 
 	/**
 	 * Método chamado quando o utilizador escolhe uma nova estação

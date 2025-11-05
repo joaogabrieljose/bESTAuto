@@ -37,6 +37,7 @@ import aluguer.Categoria;
 import aluguer.Modelo;
 import aluguer.Veiculo;
 import estacao.Estacao;
+import estacao.EstacaoSelectionListener;
 import pds.tempo.HorarioDiario;
 import pds.tempo.HorarioSemanal;
 import pds.tempo.IntervaloTempo;
@@ -47,7 +48,7 @@ import pds.util.GeradorCodigos;
 /**
  * Janela onde se podem visualizar as informações de um voo
  */
-public class JanelaAluguer extends JFrame {
+public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 
 	/** formatador para apresentar as datas */
 	private static final DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -493,4 +494,11 @@ public class JanelaAluguer extends JFrame {
 			super.paintComponent(g);
 		}
 	}
+
+	@Override
+	public void estacaoSelecionada(Estacao estacao) {
+        this.estacaoAtual = estacao;
+        limparPesquisa();
+        System.out.println("JanelaAluguer: estação selecionada -> " + (estacao == null ? "N/D" : estacao.getCodigo()));
+    }
 }

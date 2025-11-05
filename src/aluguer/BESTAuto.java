@@ -18,7 +18,7 @@ public class BESTAuto {
     public BESTAuto(){}
 
 
-    
+
 
     public List<Estacao> getEstacaes() {
         return estacaes;
@@ -36,6 +36,7 @@ public class BESTAuto {
         return alugueres;
     }
 
+    
     
 
 
