@@ -57,10 +57,10 @@ public class JanelaEstacoes extends JFrame {
 		
 		 Vector<String> nomes = new Vector<>();
 
-        if (a != null && a.getEstacaes() != null) {
-            for (estacao.Estacao e : a.getEstacaes()) {
+        if (a != null && a.getEstacoes() != null) {
+            for (estacao.Estacao e : a.getEstacoes()) {
                 String linha = String.format("%s - %s - %d lugares - %s - %d veículos",
-                    e.getCodigo(),
+                    e.getId(),
                     e.getLocalizacao(),
                     e.getCapacidade(),
                     e.getTipo() == null ? "N/A" : e.getTipo().name(),

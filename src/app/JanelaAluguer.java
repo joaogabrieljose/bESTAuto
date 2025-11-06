@@ -95,11 +95,11 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 		// vetor nomes (o que está é apenas de exemplo)
 		Vector<String> nomes = new Vector<>();
 
-		if (bestAuto != null && bestAuto.getEstacaes() != null) {
+		if (bestAuto != null && bestAuto.getEstacoes() != null) {
       
-			for (Estacao e : bestAuto.getEstacaes()) {
+			for (Estacao e : bestAuto.getEstacoes()) {
 				String linha = String.format("%s - %s - %d lugares - %s - %d veículos",
-						e.getCodigo(),
+						e.getId(),
 						e.getLocalizacao(),
 						e.getCapacidade(),
 						e.getTipo() == null ? "N/A" : e.getTipo().name(),
@@ -124,20 +124,20 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 
 		// limpar a pesquisa
 		limparPesquisa();
-		if (bestAuto == null || bestAuto.getEstacaes().isEmpty()) {
+		if (bestAuto == null || bestAuto.getEstacoes().isEmpty()) {
 			JOptionPane.showMessageDialog(this,"Nenhuma estação esta carregada ","Erro", JOptionPane.ERROR_MESSAGE);
 			estacaoAtual = null;
 			return;
 		}
 
-		if (selecionadaIndex < 0 || selecionadaIndex >= bestAuto.getEstacaes().size() ) {
-			estacaoAtual = bestAuto.getEstacaes().get(0);
+		if (selecionadaIndex < 0 || selecionadaIndex >= bestAuto.getEstacoes().size() ) {
+			estacaoAtual = bestAuto.getEstacoes().get(0);
 		}else{
-			estacaoAtual = bestAuto.getEstacaes().get(selecionadaIndex);
+			estacaoAtual = bestAuto.getEstacoes().get(selecionadaIndex);
 		}
 
-		Estacao estacaoSelecionada = bestAuto.getEstacaes().get(selecionadaIndex);
-		System.out.println("estação selecionada"+ estacaoSelecionada.getCodigo() + "localização"+ estacaoSelecionada.getLocalizacao());
+		Estacao estacaoSelecionada = bestAuto.getEstacoes().get(selecionadaIndex);
+		System.out.println("estação selecionada"+ estacaoSelecionada.getId() + "localização"+ estacaoSelecionada.getLocalizacao());
 	}
 
 	/**
@@ -146,9 +146,9 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 	private void apresentarHorario() {
 		// FEITO selecionar a estação adequada
 		if (estacaoAtual == null) {
-			if (bestAuto != null && bestAuto.getEstacaes() != null && !bestAuto.getEstacaes().isEmpty()) {
-				estacaoAtual = bestAuto.getEstacaes().get(0);
-				System.out.println("estacaoAtual não definida — usando primeira estação como fallback: " + estacaoAtual.getCodigo());
+			if (bestAuto != null && bestAuto.getEstacoes() != null && !bestAuto.getEstacoes().isEmpty()) {
+				estacaoAtual = bestAuto.getEstacoes().get(0);
+				System.out.println("estacaoAtual não definida — usando primeira estação como fallback: " + estacaoAtual.getId());
 			} else {
 				JOptionPane.showMessageDialog(this, "Nenhuma estação selecionada nem disponível.", "Aviso", JOptionPane.WARNING_MESSAGE);
 				apresentarHorario(HorarioSemanal.sempreFechado());
@@ -183,8 +183,8 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 		List<Estacao> pesquisaEstacoes = new ArrayList<>();
 		if (estacaoAtual != null) {
 			pesquisaEstacoes.add(estacaoAtual);
-		} else if (bestAuto != null && bestAuto.getEstacaes() != null) { // ajusta nome se for diferente
-			pesquisaEstacoes.addAll(bestAuto.getEstacaes());
+		} else if (bestAuto != null && bestAuto.getEstacoes() != null) { // ajusta nome se for diferente
+			pesquisaEstacoes.addAll(bestAuto.getEstacoes());
 		}
 
 		Categoria categoriaSelecionada = (Categoria) categCb.getSelectedItem();
@@ -499,6 +499,6 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 	public void estacaoSelecionada(Estacao estacao) {
         this.estacaoAtual = estacao;
         limparPesquisa();
-        System.out.println("JanelaAluguer: estação selecionada -> " + (estacao == null ? "N/D" : estacao.getCodigo()));
+        System.out.println("JanelaAluguer: estação selecionada -> " + (estacao == null ? "N/D" : estacao.getId()));
     }
 }

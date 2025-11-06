@@ -55,44 +55,54 @@ public class Main {
 	 * @param best         a companhia
 	 * @param estacoesFile o nome do ficheiro com a informação
 	 */
-	private static void readEstacoes(BESTAuto best, String estacoesFile) {
+	public static void readEstacoes(BESTAuto best, String estacoesFile) {
 		try {
 			List<LeitorFicheiros.Bloco> blocos = LeitorFicheiros.lerFicheiro(estacoesFile);
-			if (best.getEstacaes() == null) {
-				//best.setEstacoes(new ArrayList<>());
-			}
+			if (blocos == null) return;
 
 			for (LeitorFicheiros.Bloco b : blocos) {
-			// TODO completar este método
-            String codigo = b.getValor("codigo");
-            String localizacao = b.getValor("localizacao");
-            String capStr = b.getValor("capacidade");
-            String ativoStr = b.getValor("ativo");
-            String tipoStr = b.getValor("tipo");
+				if (b == null) continue;
 
-            int capacidade = capStr == null ? 0 : Integer.parseInt(capStr);
-            boolean ativo = ativoStr == null ? true : Boolean.parseBoolean(ativoStr);
+				String id = b.getValor("id");
+				if (id == null || id.isBlank()) continue;
 
-            TipoEstacao tipo = TipoEstacao.MEDIO;
-            if (tipoStr != null && !tipoStr.isBlank()) {
-                try {
-                    tipo = TipoEstacao.valueOf(tipoStr.toUpperCase());
-                } catch (IllegalArgumentException ex) {
-                    tipo = TipoEstacao.MEDIO;
-                }
-            }
+				String nome = trimNaoNulo(b.getValor("nome"),b.getValor("local"),b.getValor("localizacao"));
+				if (nome == null) nome = id;
 
-            Estacao est = new Estacao(codigo,  localizacao,  capacidade,  ativo,  tipo);
-            best.getEstacaes().add(est); // **muito importante**: adiciona ao BESTAuto
-        }
-		 System.out.println("Lidas " + best.getEstacaes().size() + " estações de " + estacoesFile);
+				String capacidade = trimNaoNulo(b.getValor("capacidade"), b.getValor("lugares"));
+				int capacidadeEstacao = safeParseInt(capacidade, 0);
 
-		} catch (IOException e) {
-			System.out.println("Erro na leitura do ficheiro " + estacoesFile);
-			e.printStackTrace();
-			System.exit(1);
+				String ativoStr = trimNaoNulo(b.getValor("ativo"), b.getValor("ativos"), "true");
+				boolean ativo = Boolean.parseBoolean(ativoStr.trim());
+
+				String tipos = trimNaoNulo(b.getValor("tipo"));
+				TipoEstacao tipo = TipoEstacao.CENTRAL;
+				if (tipos != null) {
+					try { tipo = TipoEstacao.valueOf(tipos.trim().toUpperCase()); }
+					catch (Exception ex) { return;
+					}
+				}
+			
+				estacao.Estacao est = new estacao.Estacao(id, nome, capacidadeEstacao, ativo, tipo);
+				best.getEstacoes().add(est);
+			}
+
+			System.out.println("Lidas " + best.getEstacoes().size() + " estações de " + estacoesFile);
+		} catch (IOException ex) {
+			System.err.println("Erro a ler ficheiro " + estacoesFile + ": " + ex.getMessage());
 		}
 	}
+
+	private static String trimNaoNulo(String... vals) {
+		if (vals == null) return null;
+		for (String s: vals) if (s != null && !s.isBlank()) return s.trim();
+		return null;
+	}
+	private static int safeParseInt(String s, int def) {
+		if (s == null) return def;
+		try { return Integer.parseInt(s.trim()); } catch (Exception e) { return def; }
+	}
+
 
 	/**
 	 * Processa as informações sobre como calcular o extra por haver extensão de

@@ -7,22 +7,24 @@ import aluguer.Veiculo;
 import pds.tempo.HorarioSemanal;
 
 public class Estacao {
-    private String codigo;
+      private String id;
     private String localizacao;
     private int capacidade;
     private List<Veiculo> veiculos;
-    private boolean ativo = false ;
+    private boolean ativo = false;
     private TipoEstacao tipo;
     private HorarioSemanal horarioSemanal;
 
-    public Estacao(String codigo, String localizacao, int capacidade, boolean ativo, TipoEstacao tipo){
-        this.codigo = codigo;
+   
+    public Estacao(String id, String localizacao, int capacidade, boolean ativo, TipoEstacao tipo){
+        this.id = id;
         this.localizacao = localizacao;
         this.capacidade = capacidade;
         this.ativo = ativo;
         this.veiculos = new ArrayList<>();
         this.tipo = tipo;
-        this.horarioSemanal = horarioSemanal.sempreFechado();
+        // CORREÇÃO: chamar o método estático na classe HorarioSemanal
+        this.horarioSemanal = HorarioSemanal.sempreFechado();
     }
 
     public Veiculo viaturaCentralDisponivel(){
@@ -41,12 +43,12 @@ public class Estacao {
 
 
 
-    public String getCodigo() {
-        return codigo;
+    public String getId() {
+        return id;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getLocalizacao() {
