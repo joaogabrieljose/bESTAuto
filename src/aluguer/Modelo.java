@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Modelo {
-    private String marca;
-    private String descricao;
+    private String id;
+    private String modelo;
     private Categoria categoria;
+    private String marca;
     private int lotacao;
-    private int capacidadeBagagem;
-    private double precoDiario;
+    private int bagagem;
+    private double preco;
     private List<Veiculo> veiculos;
 
-    public Modelo(String marca, String descricao, Categoria categoria, int lotacao, int capacidadeBagagem, double precoDiario){
-        this.marca = marca;
-        this.descricao = descricao;
-        this.categoria = categoria;
-        this.lotacao = lotacao;
-        this.capacidadeBagagem = capacidadeBagagem;
-        this.precoDiario = precoDiario;
-        this.veiculos = new ArrayList<>();
+    public Modelo(String id, String modelo, Categoria categoria, String marca, int lotacao, int bagagem, double preco){
+      this.id = id;
+      this.modelo = modelo;
+      this.categoria = categoria;
+      this.marca = marca;
+      this.lotacao = lotacao;
+      this.bagagem = bagagem;
+      this.preco = preco;
+      this.veiculos = new ArrayList<>();
     }
 
     public void adicionarVeiculo(Veiculo v){
@@ -32,54 +34,67 @@ public class Modelo {
         return veiculos;
     }
 
-    public String getMarca() {
-        return marca;
-    }
+       public String getId() {
+           return id;
+       }
 
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
+       public void setId(String id) {
+           this.id = id;
+       }
 
-    public String getDescricao() {
-        return descricao;
-    }
+       public String getModelo() {
+           return modelo;
+       }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+       public void setModelo(String modelo) {
+           this.modelo = modelo;
+       }
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
+       public Categoria getCategoria() {
+           return categoria;
+       }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
+       public void setCategoria(Categoria categoria) {
+           this.categoria = categoria;
+       }
 
-    public int getLotacao() {
-        return lotacao;
-    }
+       public String getMarca() {
+           return marca;
+       }
 
-    public void setLotacao(int lotacao) {
-        this.lotacao = lotacao;
-    }
+       public void setMarca(String marca) {
+           this.marca = marca;
+       }
 
-    public int getCapacidadeBagagem() {
-        return capacidadeBagagem;
-    }
+       public int getLotacao() {
+           return lotacao;
+       }
 
-    public void setCapacidadeBagagem(int capacidadeBagagem) {
-        this.capacidadeBagagem = capacidadeBagagem;
-    }
+       public void setLotacao(int lotacao) {
+           this.lotacao = lotacao;
+       }
 
-    public double getPrecoDiario() {
-        return precoDiario;
-    }
+       public int getBagagem() {
+           return bagagem;
+       }
 
-    public void setPrecoDiario(double precoDiario) {
-        this.precoDiario = precoDiario;
-    }
+       public void setBagagem(int bagagem) {
+           this.bagagem = bagagem;
+       }
 
+       public double getPreco() {
+           return preco;
+       }
+
+       public void setPreco(double preco) {
+           this.preco = preco;
+       }
+
+       public void setVeiculos(List<Veiculo> veiculos) {
+           this.veiculos = veiculos;
+       }
+
+   
  
     
 }

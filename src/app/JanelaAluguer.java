@@ -91,7 +91,7 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 		bestAuto = a;
 		setTitle("bEST Auto - A melhor experiência em aluguer de automóveis");
 
-		// FEITO colocar a lista de nomes das estações (ordenadas alfabeticamente) no
+		//TODO - FEITO colocar a lista de nomes das estações (ordenadas alfabeticamente) no
 		// vetor nomes (o que está é apenas de exemplo)
 		Vector<String> nomes = new Vector<>();
 
@@ -120,7 +120,7 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 	 * @param selecionadaIndex o índice da estação selecionada
 	 */
 	private void escolherEstacao(int selecionadaIndex) {
-		// FEITO selecionar a estação adequada
+		//TODO - FEITO selecionar a estação adequada
 
 		// limpar a pesquisa
 		limparPesquisa();
@@ -144,7 +144,7 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 	 * método chamado quando o utilizador pressiona o botão de apresentar horário
 	 */
 	private void apresentarHorario() {
-		// FEITO selecionar a estação adequada
+		//TODO - FEITO selecionar a estação adequada
 		if (estacaoAtual == null) {
 			if (bestAuto != null && bestAuto.getEstacoes() != null && !bestAuto.getEstacoes().isEmpty()) {
 				estacaoAtual = bestAuto.getEstacoes().get(0);
@@ -197,7 +197,7 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 				// filtro: viatura marcada como indisponível
 				if (v.isIndisponibilidades()) continue;
 
-			// FEITO para cada viatura da pesquisa criar um painel e 
+			// TODO - FEITO para cada viatura da pesquisa criar um painel e 
 			// associar a informação adequada. Cada painel terá um valor (à escolha do 
 			// grupo) que o associará a um resultado. Esse valor será depois usado 
 			// para identificar qual a viatura alugada se o cliente escolher esse painel
@@ -213,7 +213,7 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 				PainelAluguer pa = new PainelAluguer(
 					v.getModelo() == null ? "Modelo desconhecido" : v.getModelo().toString(),
 					v.getModelo().getLotacao(),   
-					v.getModelo().getCapacidadeBagagem(),   
+					v.getModelo().getBagagem(),   
 					precoEstimado,
 					v                 
 				);
@@ -221,7 +221,7 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 				resultado++;
 			}
 		}
-		// FEITO sem resultados (alterar o teste, claro!)? Apresentar essa informação
+		// TODO - FEITO sem resultados (alterar o teste, claro!)? Apresentar essa informação
 		if (resultado == 0) {
 			alugueres.add(new JLabel("-- SEM RESULTADOS --", JLabel.CENTER));
 		}

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import aluguer.BESTAuto;
 import aluguer.Categoria;
+import aluguer.Modelo;
+import aluguer.Veiculo;
 import app.LeitorFicheiros.Bloco;
 import estacao.Estacao;
 import estacao.TipoEstacao;
@@ -60,11 +62,12 @@ public class Main {
 			List<LeitorFicheiros.Bloco> blocos = LeitorFicheiros.lerFicheiro(estacoesFile);
 			if (blocos == null) return;
 
+			// TODO - FEITO completar este método
 			for (LeitorFicheiros.Bloco b : blocos) {
 				if (b == null) continue;
 
 				String id = b.getValor("id");
-				if (id == null || id.isBlank()) continue;
+				if (id == null || id.isBlank()) continue; 
 
 				String nome = trimNaoNulo(b.getValor("nome"),b.getValor("local"),b.getValor("localizacao"));
 				if (nome == null) nome = id;
@@ -195,11 +198,12 @@ public class Main {
 	 * @param best a companhia
 	 * @param file o nome do ficheiro
 	 */
-	private static void readModelos(BESTAuto best, String file) {
+	private static void readModelos(BESTAuto best, String modeloFile) {
 		try {
-			List<LeitorFicheiros.Bloco> blocos = LeitorFicheiros.lerFicheiro(file);
+			List<LeitorFicheiros.Bloco> blocos = LeitorFicheiros.lerFicheiro(modeloFile);
 			for (LeitorFicheiros.Bloco b : blocos) {
-				String id = b.getValor("id");
+				if (b == null) continue;
+            	String id = b.getValor("id");
 				String modelo = b.getValor("modelo");
 				Categoria categoria = Categoria.valueOf(b.getValor("categoria"));
 				String marca = b.getValor("marca");
@@ -207,11 +211,14 @@ public class Main {
 				int bagagem = Integer.parseInt(b.getValor("bagagem"));
 				long preco = Integer.parseInt(b.getValor("preco"));
 
-				// TODO completar o método
+				// TODO - FEITO completar o método
+				Modelo m = new Modelo(id, modelo, categoria, marca, lotacao, bagagem, preco);
+                best.getModelos().add(m);
 
 			}
+			System.out.println("Lidas " + best.getModelos().size() + " modelos de " + modeloFile);
 		} catch (IOException e) {
-			System.out.println("Erro na leitura do ficheiro " + file);
+			System.out.println("Erro na leitura do ficheiro " + modeloFile);
 			e.printStackTrace();
 			System.exit(0);
 		}
@@ -223,19 +230,22 @@ public class Main {
 	 * @param best a companhia
 	 * @param file o nome do ficheiro
 	 */
-	private static void readViaturas(BESTAuto best, String file) {
+	private static void readViaturas(BESTAuto best, String veiculoFile) {
 		try {
-			List<LeitorFicheiros.Bloco> blocos = LeitorFicheiros.lerFicheiro(file);
+			List<LeitorFicheiros.Bloco> blocos = LeitorFicheiros.lerFicheiro(veiculoFile);
 			for (LeitorFicheiros.Bloco b : blocos) {
 				String matricula = b.getValor("matricula");
 				String modelo = b.getValor("modelo");
 				String estacao = b.getValor("estacao");
 
-				// TODO completar o método
+				// TODO completar o método 
+				Veiculo veiculo = new Veiculo(matricula, null, estacao, false);
+				best.getVeiculos().add(veiculo);
 
 			}
+			System.out.println("Lidas " + best.getModelos().size() + " modelos de " + veiculoFile);
 		} catch (IOException e) {
-			System.out.println("Erro na leitura do ficheiro " + file);
+			System.out.println("Erro na leitura do ficheiro " + veiculoFile);
 			e.printStackTrace();
 			System.exit(0);
 		}

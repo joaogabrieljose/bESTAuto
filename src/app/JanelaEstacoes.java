@@ -43,16 +43,18 @@ public class JanelaEstacoes extends JFrame {
 	DefaultListModel<String> matriculasModel = new DefaultListModel<>();
 	DefaultTableModel indisponibilidadesModel;
 
+	private BESTAuto bestAuto;
 	 private EstacaoSelectionListener listener;
 	 //private Estacao estacaoAtual = null;
 	/**
 	 * Cria uma janela para apresentar informações sobre uma estação
 	 */
 	public JanelaEstacoes(BESTAuto a, EstacaoSelectionListener listener) {
+		this.bestAuto = a;
 		this.listener = listener;
 		setTitle("bEST Auto - A melhor experiência em aluguer de automóveis");
 
-		// FEITO colocar a lista de nomes das estações (ordenadas alfabeticamente) no
+		//TODO - FEITO colocar a lista de nomes das estações (ordenadas alfabeticamente) no
 		// vetor nomes (o que está é apenas de exemplo)
 		
 		 Vector<String> nomes = new Vector<>();
@@ -81,7 +83,7 @@ public class JanelaEstacoes extends JFrame {
 	 * @param selecionadaIndex o índice da estação selecionada
 	 */
 	private void escolherEstacao(int selecionadaIndex) {
-		// TODO escolher a estação e colocar na lista as categorias suportas por esta
+		// TODO - FEITO escolher a estação e colocar na lista as categorias suportas por esta
 		// estação (neste momento está a colocar todas)
 
 		Collection<Categoria> lista = List.of(Categoria.values());
@@ -93,8 +95,29 @@ public class JanelaEstacoes extends JFrame {
 		if (indisponibilidadesModel != null)
 			indisponibilidadesModel.setRowCount(0);
 
+		if (bestAuto == null || bestAuto.getEstacoes() == null || bestAuto.getEstacoes().isEmpty())
+			return;
+
+		if (selecionadaIndex < 0 || selecionadaIndex >= bestAuto.getEstacoes().size())
+			return;
+
+		Estacao estacaoAtual = bestAuto.getEstacoes().get(selecionadaIndex);
+
+		if (listener != null)
+			listener.estacaoSelecionada(estacaoAtual);
+
+
 		// adicionar as novas categorias à lista
-		categoriasModel.addAll(lista);
+		for (aluguer.Veiculo v : estacaoAtual.getVeiculos()) {
+			if (v == null || v.getModelo() == null) continue;
+			Categoria c = v.getModelo().getCategoria();
+			if (c != null && !categoriasModel.contains(c)) {
+				categoriasModel.addElement(c);
+			}
+    	}
+		if (categoriasModel.isEmpty()) {
+			categoriasModel.addElement(null);
+		}
 	}
 
 	/**
@@ -105,7 +128,7 @@ public class JanelaEstacoes extends JFrame {
 	private void escolherCategoria(Categoria c) {
 		// TODO colocar na lista o nome dos modelos que a estação selecionada tem nesta
 		// categoria (Neste momento é apenas um exemplo)
-		List<String> modelos = List.of("Koenigsegg Gemera", "Koenigsegg Jesko Attack");
+		List<String> modelos = List.of("Koenigsegg Gemera", "Koenigsegg Jesko Attack", "Dercio Simione");
 
 		// limpar as restantes listas
 		modelosModel.clear();

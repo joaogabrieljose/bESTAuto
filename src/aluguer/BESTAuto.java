@@ -10,7 +10,7 @@ import estacao.Estacao;
  * Classe que representa o sistema
  */
 public class BESTAuto {
-
+    
     private final List<Estacao> estacoes = new ArrayList<>();
     private final List<Modelo> modelos = new ArrayList<>();
     private final List<Veiculo> veiculos = new ArrayList<>();
@@ -40,6 +40,8 @@ public class BESTAuto {
     public List<Modelo> getModelos() {
         return modelos;
     }
+
+     
 
     public void addModelo(Modelo m) {
         if (m != null) modelos.add(m);

@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Veiculo {
+
     private String matricula;
     private Modelo modelo;
-    private String estacaoAtual;
+    private String estacao;
     private boolean indisponibilidades = false;
     private List<Aluguer> aluguers;
     
-    public Veiculo(String matricula, Modelo modelo, String estacaoAtual, boolean indisponibilidades){
+    public Veiculo(String matricula, Modelo modelo, String estacao, boolean indisponibilidades){
         this.matricula = matricula;
         this.modelo = modelo;
-        this.estacaoAtual = estacaoAtual;
+        this.estacao = estacao;
         this.indisponibilidades = indisponibilidades;
         this.aluguers = new ArrayList<>();
 
