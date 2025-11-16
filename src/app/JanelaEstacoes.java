@@ -176,16 +176,39 @@ public class JanelaEstacoes extends JFrame {
 	 * @param modelo nome do modelo selecionado
 	 */
 	private void escolherModelo(String modelo) {
-		// TODO colocar na lista todas as matrículas das viaturas do modelo selecionado,
+		// TODO - FEITOcolocar na lista todas as matrículas das viaturas do modelo selecionado,
 		// o que está é apenas um exemplo
-		List<String> matriculas = List.of("ZZ-98-ZZ", "ZZ-99-ZZ");
+		if (modelo == null || modelo.isBlank()) return;
 
 		// limpar as restantes listas
 		matriculasModel.clear();
 		indisponibilidadesModel.setRowCount(0);
 
+		Estacao estacaoAtual = null;
+		try {
+			JComboBox<?> combo = (JComboBox<?>) ((JPanel) getContentPane().getComponent(0)).getComponent(0);
+			int idx = combo.getSelectedIndex();
+			if (idx >= 0 && idx < bestAuto.getEstacoes().size())
+				estacaoAtual = bestAuto.getEstacoes().get(idx);
+		} catch (Exception e) {
+			return;
+		}
+		if (estacaoAtual == null) return;
+
 		// adicionar as matrículas à lista
-		matriculasModel.addAll(matriculas);
+		for (aluguer.Veiculo v : estacaoAtual.getVeiculos()) {
+
+			if (v == null || v.getModelo() == null) continue;
+
+			Modelo m = v.getModelo();
+			String nomeModelo = m.getMarca() + " " + m.getModelo();
+			if (nomeModelo.equalsIgnoreCase(modelo)) {
+
+				if (!matriculasModel.contains(v.getMatricula())) {
+					matriculasModel.addElement(v.getMatricula());
+				}
+			}
+		}
 	}
 
 	/**
