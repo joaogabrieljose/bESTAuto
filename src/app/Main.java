@@ -233,14 +233,59 @@ public class Main {
 	private static void readViaturas(BESTAuto best, String veiculoFile) {
 		try {
 			List<LeitorFicheiros.Bloco> blocos = LeitorFicheiros.lerFicheiro(veiculoFile);
+			
+			if (blocos == null) return;
+
+
 			for (LeitorFicheiros.Bloco b : blocos) {
 				String matricula = b.getValor("matricula");
 				String modelo = b.getValor("modelo");
 				String estacao = b.getValor("estacao");
 
-				// TODO completar o método 
-				Veiculo veiculo = new Veiculo(matricula, null, estacao, false);
+				if (matricula == null || matricula.isBlank()) continue;
+
+				Modelo modeloEncontrado = null;
+				if (modelo != null && !modelo.isBlank()) {
+					for (Modelo mod : best.getModelos()) {
+						if (modelo.equalsIgnoreCase(mod.getId()) ||
+							modelo.equalsIgnoreCase(mod.getModelo()) ||
+							modelo.equalsIgnoreCase(mod.getMarca() + " " + mod.getModelo())) {
+							modeloEncontrado = mod;
+							break;
+						}
+					}
+				}
+
+
+				// TODO - FEITO completar o método 
+				Veiculo veiculo = new Veiculo(matricula, modeloEncontrado, estacao, false);
 				best.getVeiculos().add(veiculo);
+
+				if (modeloEncontrado != null) {
+					modeloEncontrado.adicionarVeiculo(veiculo);
+				}
+
+				if (estacao != null && !estacao.isBlank()) {
+					estacao.Estacao est = null;
+					for (estacao.Estacao e : best.getEstacoes()) {
+						if (estacao.equalsIgnoreCase(e.getId()) || estacao.equalsIgnoreCase(e.getLocalizacao())) {
+							est = e;
+							break;
+						}
+					}
+					if (est != null) {
+						List<Veiculo> vs = est.getVeiculos();
+						if (vs == null) {
+							est.setVeiculos(new ArrayList<>());
+							vs = est.getVeiculos();
+						}
+						if (!vs.contains(veiculo)) vs.add(veiculo);
+					} else {
+						System.out.println("Aviso: estação '" + estacao + "' não encontrada para a viatura " + matricula);
+					}
+				}
+        
+
 
 			}
 			System.out.println("Lidas " + best.getModelos().size() + " modelos de " + veiculoFile);

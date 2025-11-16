@@ -28,6 +28,7 @@ import static javax.swing.SpringLayout.*;
 
 import aluguer.BESTAuto;
 import aluguer.Categoria;
+import aluguer.Modelo;
 import estacao.Estacao;
 import estacao.EstacaoSelectionListener;
 
@@ -126,17 +127,47 @@ public class JanelaEstacoes extends JFrame {
 	 * @param c a categoria escolhida
 	 */
 	private void escolherCategoria(Categoria c) {
-		// TODO colocar na lista o nome dos modelos que a estação selecionada tem nesta
+		// TODO - FEITO colocar na lista o nome dos modelos que a estação selecionada tem nesta
 		// categoria (Neste momento é apenas um exemplo)
-		List<String> modelos = List.of("Koenigsegg Gemera", "Koenigsegg Jesko Attack", "Dercio Simione");
+		if (c == null) return;
 
+		Estacao estacaoAtual = null;
+
+		if (bestAuto != null && bestAuto.getEstacoes() != null) {
+
+			JComboBox<?> combo = (JComboBox<?>)
+				((JPanel) getContentPane().getComponent(0)).getComponent(0);
+			int idx = combo.getSelectedIndex();
+			if (idx >= 0 && idx < bestAuto.getEstacoes().size()) {
+				estacaoAtual = bestAuto.getEstacoes().get(idx);
+			}
+		}
 		// limpar as restantes listas
 		modelosModel.clear();
 		matriculasModel.clear();
 		indisponibilidadesModel.setRowCount(0);
+		
+		if (estacaoAtual == null) return;
 
 		// adicionar os novos modelos à lista
-		modelosModel.addAll(modelos);
+		for (aluguer.Veiculo v : estacaoAtual.getVeiculos()) {
+
+			if (v == null || v.getModelo() == null) continue;
+
+			Modelo m = v.getModelo();
+
+			// mantém apenas modelos da categoria escolhida
+			if (m.getCategoria() == c) {
+				String nomeModelo = m.getMarca() + " " + m.getModelo();
+				if (!modelosModel.contains(nomeModelo)) {
+					modelosModel.addElement(nomeModelo);
+				}
+			}
+		}
+
+		if (modelosModel.isEmpty()) {
+			modelosModel.addElement("(Sem modelos nesta categoria)");
+		}
 	}
 
 	/**
