@@ -218,15 +218,45 @@ public class JanelaEstacoes extends JFrame {
 	 */
 	private void escolherAutomovel(String matricula) {
 		indisponibilidadesModel.setRowCount(0); // limpar a tabela
+			 indisponibilidadesModel.setRowCount(0);
 
-		// TODO para cada indiponibilidade da viatura com a matricula selecionada chamar
+		// TODO - FEITO para cada indiponibilidade da viatura com a matricula selecionada chamar
 		// o método adicionarLinha para adicionar uma linha à tabela de
 		// indisponibilidades (o que está são apenas exemplos)
-		adicionarLinha(LocalDateTime.now().plusDays(1).withHour(17).withMinute(0), LocalDateTime.now().plusDays(2),
-				"Deslocar para ALC");
-		adicionarLinha(LocalDateTime.now().plusDays(2), LocalDateTime.now().plusDays(4), "Aluguer XX1234XX");
-		adicionarLinha(LocalDateTime.now().plusDays(4), LocalDateTime.now().plusDays(5).withHour(9).withMinute(30),
-				"Retornar a CTB");
+		
+		if (matricula == null || matricula.isBlank() || bestAuto == null) {
+			adicionarLinha(LocalDateTime.now(), LocalDateTime.now(), "(Matrícula/estado inválido)");
+			return;
+		}
+		System.out.println("escolherAutomovel: matrícula selecionada -> '" + matricula + "'");
+
+		 aluguer.Veiculo v = bestAuto.getVeiculos().stream()
+            .filter(x -> x != null && matricula.trim().equalsIgnoreCase(x.getMatricula().trim())).findFirst()
+			.orElse(null);
+
+		if (v == null) {
+        	System.out.println("escolherAutomovel: veículo não encontrado para matrícula " + matricula);
+			adicionarLinha(LocalDateTime.now(), LocalDateTime.now(), "(Veículo não encontrado)");
+			return;
+		}
+
+		System.out.println("escolherAutomovel: encontrado veículo -> " + v.getMatricula()
+            + " ; indisponibilidades.size = " + (v.getIndisponibilidades() == null ? "null" : v.getIndisponibilidades().size()));
+
+			if (v.getIndisponibilidades() == null || v.getIndisponibilidades().isEmpty()) {
+				adicionarLinha(LocalDateTime.now(), LocalDateTime.now(), " Sem indisponibilidades registadas ");
+				return;
+			}
+		
+		for (pds.tempo.IntervaloTempo intervalo : v.getIndisponibilidades()) {
+
+			LocalDateTime ini = intervalo.getInicio();
+			LocalDateTime fim = intervalo.getFim();
+
+			String motivo = "Indisponibilidade";
+
+			adicionarLinha(ini, fim, motivo);
+		}
 	}
 
 	/**

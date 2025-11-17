@@ -195,7 +195,7 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 
 			for (aluguer.Veiculo v : est.getVeiculos()) {
 				// filtro: viatura marcada como indisponível
-				if (v.isIndisponibilidades()) continue;
+				  if (v.getIndisponibilidades().isEmpty()) continue;
 
 			// TODO - FEITO para cada viatura da pesquisa criar um painel e 
 			// associar a informação adequada. Cada painel terá um valor (à escolha do 

@@ -3,19 +3,21 @@ package aluguer;
 import java.util.ArrayList;
 import java.util.List;
 
+import pds.tempo.IntervaloTempo;
+
 public class Veiculo {
 
     private String matricula;
     private Modelo modelo;
     private String estacao;
-    private boolean indisponibilidades = false;
+    private List<IntervaloTempo> indisponibilidades = new ArrayList<>();
     private List<Aluguer> aluguers;
     
-    public Veiculo(String matricula, Modelo modelo, String estacao, boolean indisponibilidades){
+    public Veiculo(String matricula, Modelo modelo, String estacao){
         this.matricula = matricula;
         this.modelo = modelo;
         this.estacao = estacao;
-        this.indisponibilidades = indisponibilidades;
+        this.indisponibilidades = new ArrayList<>();
         this.aluguers = new ArrayList<>();
 
         if (modelo != null) {
@@ -28,14 +30,7 @@ public class Veiculo {
             aluguers.add(aluguer);
         }
     }
-     public boolean isIndisponibilidades() {
-        return indisponibilidades;
-    }
-
-    public void setIndisponibilidades(boolean indisponibilidades) {
-        this.indisponibilidades = indisponibilidades;
-    }
-
+    
     public List<Aluguer> getAluguers() {
         return aluguers;
     }
@@ -50,23 +45,16 @@ public class Veiculo {
            System.out.println("Reserva "+  a.getReserva());
         }
     }
-    
-    
-     //TUDO
-    public void consultaVeiculo(){
-
-    }
-    //TUDO
-    public void moveViatuaraEntreEstacao(){
-
-    }
-
-    //TUDO
-    public void atualizaEstado(){
-
-    }
 
     
+    public List<IntervaloTempo> getIndisponibilidades() {
+        return indisponibilidades;
+    }
+
+    public void setIndisponibilidades(List<IntervaloTempo> indisponibilidades) {
+        this.indisponibilidades = indisponibilidades;
+    }
+
     public String getMatricula() {
         return matricula;
     }
@@ -84,11 +72,11 @@ public class Veiculo {
     }
 
     public String getEstacaoAtual() {
-        return estacaoAtual;
+        return estacao;
     }
 
     public void setEstacaoAtual(String estacaoAtual) {
-        this.estacaoAtual = estacaoAtual;
+        this.estacao = estacaoAtual;
     }
 
    

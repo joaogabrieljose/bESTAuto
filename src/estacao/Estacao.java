@@ -27,22 +27,20 @@ public class Estacao {
         this.horarioSemanal = HorarioSemanal.sempreFechado();
     }
 
-    public Veiculo viaturaCentralDisponivel(){
+    public Veiculo viaturaCentralDisponivel() {
         if (this.tipo != TipoEstacao.CENTRAL) {
-            throw new IllegalArgumentException("esta estação não é a central...");
+            throw new IllegalArgumentException("Esta estação não é a central.");
         }
-        for(Veiculo v: veiculos){
 
-            if (!v.isIndisponibilidades()) {
-                v.setIndisponibilidades(true);
+        for (Veiculo v : veiculos) {
+            if (v.getIndisponibilidades().isEmpty()) {
                 return v;
             }
         }
-        throw new IllegalArgumentException("nenhuma viatura disponivel na central...");
+        throw new IllegalArgumentException("Nenhuma viatura disponível na central.");
     }
 
-
-
+    
     public String getId() {
         return id;
     }

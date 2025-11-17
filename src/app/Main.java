@@ -258,7 +258,7 @@ public class Main {
 
 
 				// TODO - FEITO completar o método 
-				Veiculo veiculo = new Veiculo(matricula, modeloEncontrado, estacao, false);
+				Veiculo veiculo = new Veiculo(matricula, modeloEncontrado, estacao);
 				best.getVeiculos().add(veiculo);
 
 				if (modeloEncontrado != null) {
