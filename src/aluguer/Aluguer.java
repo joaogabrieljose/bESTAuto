@@ -24,30 +24,7 @@ public class Aluguer {
             veiculo.adicionarAluguer(this);
         }
     }
-    //TUDO
-    public void criaAluguer(){
-
-    }
-
-    //TUDO
-    public void validaAluguer(){
-
-    }
-
-    //TUDO
-    public void marcaIndisponibilidades(){
-
-    }
-
-    //TUDO
-    public void geraCodigoAluguer(){
-
-    }
-    
-    //TUDO
-    public void PrecoCalculator(){
-        
-    }
+   
 
     public String getReserva() {
         return reserva;

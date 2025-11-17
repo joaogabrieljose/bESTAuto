@@ -20,6 +20,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -112,6 +114,7 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 		if (nomes.isEmpty()) {
 			nomes.add("sem estão carregada");
 		}
+		 setupJanela(nomes);
 	}	
 
 	/**
@@ -248,18 +251,54 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 	 *              quando se criou o painel de aluguer
 	 */
 	private void alugar(Object valor) {
-		// TODO fazer o aluguer
+		// TODO - FEITO fazer o aluguer
 
-		// TODO colocar a info certa nas variáveis
-		String code = "AA1122BB";
-		String matricula = "ZZ-99-ZZ";
+		Veiculo veiculos = (Veiculo) valor;
+		
+		int inicio = toInt(intervaloSel.getInicio());
+		int fim   = toInt(intervaloSel.getFim());
 
-		// apresentar a info
+		cliente.Cliente cliente = null;
+
+		long precoCent = calcularPrecoEstimado(veiculos, intervaloSel);
+		double precoTotal = precoCent / 100.0;
+
+		String codigoReserva = GeradorCodigos.gerarCodigo(8); 
+		int codigo = ThreadLocalRandom.current().nextInt(100000, 999999);
+
+		aluguer.Aluguer a = new aluguer.Aluguer(codigoReserva,veiculos,cliente,inicio,fim,precoTotal,codigo);
+
+    	veiculos.adicionarAluguer(a);
+
+		IntervaloTempo ind = IntervaloTempo.entre(intervaloSel.getInicio(), intervaloSel.getFim());
+		veiculos.getIndisponibilidades().add(ind);
+
+		// TODO - FEITO colocar a info certa nas variáveis
 		JOptionPane.showMessageDialog(this,
-				"<html>Obrigado por usar os nossos serviços!<br>Aluguer " + code + ", carro será " + matricula
-						+ "</html>");
+			"<html>Obrigado por usar os nossos serviços!<br>" +
+			"Reserva: <b>" + codigoReserva + "</b><br>" +
+			"Código interno: <b>" + codigo + "</b><br>" +
+			"Carro: <b>" + veiculos.getMatricula() + "</b><br>" +
+			"Modelo: " + veiculos.getModelo() + "<br>" +
+			"Preço total: " + String.format("%.2f€", precoTotal) + "<br>" +
+			"De: " + intervaloSel.getInicio().format(dataFormatter) +
+			" às " + intervaloSel.getInicio().format(horaFormatter) + "<br>" +
+			"Até: " + intervaloSel.getFim().format(dataFormatter) +
+			" às " + intervaloSel.getFim().format(horaFormatter) +
+			"</html>");
+
 		limparPesquisa();
 	}
+
+	// metodo auxiliar aluguer 
+	private int toInt(LocalDateTime dt) {
+		return dt.getYear() * 100000000
+				+ dt.getMonthValue() * 1000000
+				+ dt.getDayOfMonth() * 10000
+				+ dt.getHour() * 100
+				+ dt.getMinute();
+	}
+
 
 
 	/**
