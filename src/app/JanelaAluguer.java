@@ -226,7 +226,7 @@ public class JanelaAluguer extends JFrame implements EstacaoSelectionListener{
 		}
 		// TODO - FEITO sem resultados (alterar o teste, claro!)? Apresentar essa informação
 		if (resultado == 0) {
-			alugueres.add(new JLabel("-- SEM RESULTADOS --", JLabel.CENTER));
+			alugueres.add(new JLabel(" SEM RESULTADOS ", JLabel.CENTER));
 		}
 	}
 
